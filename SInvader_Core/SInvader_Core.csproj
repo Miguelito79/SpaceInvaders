@@ -58,8 +58,9 @@
     <Compile Include="IO\ShiftDevice.cs" />
     <Compile Include="IO\ShiftOffsetDevice.cs" />
     <Compile Include="IO\SoundDevice.cs" />
-    <Compile Include="MMU\mcu.cs" />
-    <Compile Include="MMU\mcud.cs" />
+    <Compile Include="MMU\MCU.cs" />
+    <Compile Include="MMU\MCUD.cs" />
+    <Compile Include="MMU\MCUR.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

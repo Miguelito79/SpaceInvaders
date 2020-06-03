@@ -12,6 +12,12 @@ namespace SInvader_Console
         static void Main(string[] args)
         {
             Emulator emulator = Emulator.Instance;
+            emulator.MCU.WriteByte(0x05, 0xC9);
+            emulator.CPU.PC = 0x100;
+
+            emulator.PerformMultipleStep(@"C:\Test\spaceinvaders\i8080_Disassembler\Test\cputest.com", 0x100);
+
+
             //emulator.Run(@"C:\Test\spaceinvaders\i8080_Disassembler\Test\cpudiag.bin", 0x100);
             //emulator.Run(@"C:\Test\spaceinvaders\i8080_Disassembler\Test\8080ex1.com", 0x100);
             //emulator.Run(@"C:\Test\spaceinvaders\i8080_Disassembler\Test\8080exer.com", 0x100);            

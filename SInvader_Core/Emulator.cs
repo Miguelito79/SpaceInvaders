@@ -38,7 +38,7 @@ namespace SInvader_Core
 
         private CPU _cpu;
         private GPU _gpu;
-        private MCU _mcu;
+        private MCUD _mcu;
 
         //Number of total cycles executed by CPU
         //private int _tCycles;
@@ -59,6 +59,11 @@ namespace SInvader_Core
         public TCurrentState CurrentState
         {
             get { return _currentState; }
+            private set { }
+        }
+
+        public CPU CPU        {
+            get { return _cpu; }
             private set { }
         }
 
@@ -92,17 +97,11 @@ namespace SInvader_Core
             _stopEmulation = false;
             _nextVblankInterrupt = GPU.END_VBLANK_OPCODE;
 
-            _mcu = new MCU();
+            _mcu = new MCUD();
             _mcu.Initialize();
-
-            //Enable only for testing purpose
-            //MCU.WriteByte(0x05, 0xC9);            
-
+          
             _cpu = new CPU();
             _cpu.Initialize();
-
-            //Enable onlu for testing purpose
-            //_cpu.PC = 0x100;
 
             _gpu = new GPU();
             _gpu.Initialize();
@@ -175,7 +174,21 @@ namespace SInvader_Core
                 _timer.Change(Timeout.Infinite, Timeout.Infinite);
                 OnEmulatorStateChange(_currentState = TCurrentState.STOPPED);
             }
-        }        
+        }     
+        
+        /// <summary>
+        /// Function added to display result of cpu exercizer test
+        /// </summary>
+        public void PerformMultipleStep(string fullPath, int memoryOffset)
+        {
+            if (MCU.LoadFileInMemoryAt(fullPath, memoryOffset))
+            {
+                while (!_stopEmulation)
+                {
+                    PerformSingleStep();
+                }
+            }
+        }
 
         private int PerformSingleStep()
         {
@@ -192,7 +205,7 @@ namespace SInvader_Core
             if (_vBlankCycles >= GPU.HALF_CYCLES_PER_FRAMES)
             {
                 //Adding VBLANK interrupt and draw image
-                AddVblankInterrupts();                
+                AddVblankInterrupts();
             }
 
             return cycles;
@@ -217,8 +230,11 @@ namespace SInvader_Core
 
             //Time to draw on screen and firing the event to the main form
 
-            _gpu.DrawImageOnScreen();
-            OnDrawImage(_gpu.Display);
+            if (OnDrawImage != null)
+            {
+                _gpu.DrawImageOnScreen();
+                OnDrawImage(_gpu.Display);
+            }
         }
 
         public void KeyDown(int key)
@@ -229,39 +245,6 @@ namespace SInvader_Core
         public void KeyUp(int key)
         {
             _devices.KeyUp(key);
-        }
-
-        //public void Run(string[] multipleRomFiles)
-        //{
-        //    if (MCU.LoadMultipleFiles(multipleRomFiles))
-        //    {
-        //        Thread thread = new Thread(new ThreadStart(RunAsync_CallBack));
-        //        thread.Start();
-        //    }
-        //}
-
-
-                //private void RunAsync_CallBack()
-        //{            
-        //    _currentState = TCurrentState.RUNNING;
-        //    while (!_stopEmulation)
-        //    {
-        //        while (_tCycles < GPU.HALF_CYCLES_PER_FRAMES)
-        //        {
-        //            if (!_cpu.Halted)
-        //            {
-        //                _cpu.Fetch();
-        //                _tCycles += _cpu.Execute();                        
-        //            }
-        //        }
-
-        //        _tCycles -= GPU.HALF_CYCLES_PER_FRAMES;
-
-        //        //Adding interrupts if VBLANK period
-        //        AddVblankInterrupts();                
-        //    }
-
-        //    OnEmulatorStateChange(_currentState = TCurrentState.STOPPED);            
-        //}
+        }        
     }
 }

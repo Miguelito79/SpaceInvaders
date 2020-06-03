@@ -1381,7 +1381,7 @@ namespace SInvader_Core.i8080
             }
             else if (callingAddress == 0x00)
             {
-                //Emulator.Instance.StopEmulation = true;
+                Emulator.Instance.StopEmulation();
             }
 #endif
 
