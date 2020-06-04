@@ -7,14 +7,25 @@ using System.Threading.Tasks;
 
 namespace SInvader_Core.MMU
 {
+    /// <summary>
+    /// MCUR: Memory control unit for release of "Space Invaders"
+    /// This class provide memory access specific for the emulation of SpaceInvaders
+    /// </summary>
     class MCUR : MCU
     {              
-        public override void Initialize()
+        public MCUR()
         {
             buffer = new byte[3][];
             buffer[0] = new byte[8192]; //ROM  From 0000 to 1fff        
             buffer[1] = new byte[1024]; //RAM  from 2000 to 23ff        
             buffer[2] = new byte[7168]; //VRAM From 2400 to 3fff        
+        }        
+
+        public override void Clear()
+        {
+            Array.Clear(buffer[0], 0, buffer[0].Length);
+            Array.Clear(buffer[1], 0, buffer[1].Length);
+            Array.Clear(buffer[2], 0, buffer[2].Length);
         }
 
         public override bool LoadMultipleFiles(string[] path)
@@ -89,17 +100,6 @@ namespace SInvader_Core.MMU
             return response;
         }
 
-        /// <summary>
-        /// Get a copuy of video to display in screen
-        /// </summary>
-        /// <returns></returns>
-        public override byte[] GetVideoRam()
-        {
-            byte[] response = new byte[7168];
-            Array.Copy(buffer[2], 0x0, response, 0, 7168);
-            return response;
-        }
-
         public override byte ReadByte(ushort address)
         {
             byte response = 0;
@@ -117,7 +117,7 @@ namespace SInvader_Core.MMU
             //else if (address >= 0x4000 && address < 0x4400)
             //    response = ram[address - 0x4000];
 
-            //VRAM MIRROT
+            //VRAM MIRROR
             //else if (address >= 0x4400 && address < 0X6000)
             //    response = vram[address - 0x4400];
 
@@ -129,9 +129,11 @@ namespace SInvader_Core.MMU
 
         public override void WriteByte(ushort address, byte data)
         {
+            //Writing on RAM
             if (address >= 0x2000 && address < 0x2400)
                 buffer[1][address - 0x2000] = data;
 
+            //Writing on VRAM
             else if (address >= 0x2400 && address < 0x4000)
                 buffer[2][address - 0x2400] = data;
 
@@ -141,7 +143,10 @@ namespace SInvader_Core.MMU
 
             //VRAM MIRROR
             else if (address >= 0x4400 && address < 0X6000)
-                buffer[2][address - 0x4400] = data;            
+                buffer[2][address - 0x4400] = data;
+
+            else
+                throw new Exception("Out of range when writing memory address");
         }
     }
 }

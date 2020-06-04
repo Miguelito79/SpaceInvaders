@@ -7,12 +7,21 @@ using System.Threading.Tasks;
 
 namespace SInvader_Core.MMU
 {
+    /// <summary>
+    /// MCUD: Memory control unit for debug purpose
+    /// This class provide full memory access (64k of RAM) for testing all the cpu exercizer
+    /// </summary>
     public class MCUD : MCU
-    {                       
-        public override void Initialize()
+    {                    
+        public MCUD()
         {
             buffer = new byte[1][];
             buffer[0] = new byte[64 * 1024];
+        }  
+        
+        public override void Clear()
+        {
+            Array.Clear(buffer[0], 0, buffer[0].Length);
         }
 
         public override bool LoadMultipleFiles(string[] path)
@@ -85,12 +94,7 @@ namespace SInvader_Core.MMU
             }
 
             return response;
-        }
-
-        public override byte[] GetVideoRam()
-        {
-            return null;
-        }
+        }       
 
         public override byte ReadByte(ushort address)
         {

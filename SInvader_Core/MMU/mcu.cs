@@ -11,11 +11,14 @@ using System.Threading.Tasks;
 
 namespace SInvader_Core.MMU
 {
+    /// <summary>
+    /// Abstract class for memory management in DEBUG and RELEASE mode
+    /// </summary>
     public abstract class MCU
     {
-        protected byte[][] buffer;
+        public byte[][] buffer;
 
-        public abstract void Initialize();
+        public abstract void Clear();
 
         public abstract bool LoadMultipleFiles(string[] path);
 
@@ -25,9 +28,7 @@ namespace SInvader_Core.MMU
 
         public abstract byte ReadByte(ushort address);
 
-        public abstract void WriteByte(ushort address, byte data);
-
-        public abstract byte[] GetVideoRam();
+        public abstract void WriteByte(ushort address, byte data);        
     }
 }
         

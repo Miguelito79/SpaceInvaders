@@ -38,7 +38,7 @@ namespace SInvader_Core
 
         private CPU _cpu;
         private GPU _gpu;
-        private MCUD _mcu;
+        private MCU _mcu;
 
         //Number of total cycles executed by CPU
         //private int _tCycles;
@@ -70,7 +70,7 @@ namespace SInvader_Core
         public MCU MCU
         {
             get { return _mcu; }
-            private set { }
+            set { _mcu = value; }
         }
 
         public GPU GPU
@@ -97,8 +97,7 @@ namespace SInvader_Core
             _stopEmulation = false;
             _nextVblankInterrupt = GPU.END_VBLANK_OPCODE;
 
-            _mcu = new MCUD();
-            _mcu.Initialize();
+            _mcu = new MCUR();          
           
             _cpu = new CPU();
             _cpu.Initialize();
@@ -123,9 +122,9 @@ namespace SInvader_Core
             {
                 _stopEmulation = true;
                 _stopWatch.Stop();
-                
-                _cpu.Initialize();
-                _mcu.Initialize();
+
+                _mcu.Clear();
+                _cpu.Initialize();                
                 _gpu.Initialize();
             }
         }
@@ -185,7 +184,19 @@ namespace SInvader_Core
             {
                 while (!_stopEmulation)
                 {
-                    PerformSingleStep();
+                    if (!_cpu.Halted)
+                    {
+                        _cpu.Fetch();
+                        _cpu.Execute();
+                    }
+
+                    // CP/M warm boot (test finished and restarted itself)
+                    if (_cpu.PC == 0x00)
+                    _stopEmulation = true;
+
+                    // Call to CP/M bios emulated function to write characters on screen
+                    if (_cpu.PC == 0x05)
+                        _cpu.PerformBdosCall();
                 }
             }
         }

@@ -49,8 +49,12 @@ namespace SInvader_Core.GUI
         }
 
         private byte[] GetVideoRam()
-        {            
-            return Emulator.Instance.MCU.GetVideoRam();
+        {
+            byte[] vram = Emulator.Instance.MCU.buffer[2];
+
+            byte[] response = new byte[7168];
+            Array.Copy(vram, 0x0, response, 0, 7168);
+            return response;            
         }
 
         public void DrawImageOnScreen()

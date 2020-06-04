@@ -1347,7 +1347,7 @@ namespace SInvader_Core.i8080
                 PC += instruction.length;
                 _tCycles = instruction.aCycles;
             }
-        }
+        }        
 
         /// <summary>
         /// Call Address Unconditional
@@ -1356,34 +1356,7 @@ namespace SInvader_Core.i8080
         public void CallUnconditional(Instruction instruction)
         {
             ushort nextInstructionAddress = (ushort)(PC + instruction.length);
-            ushort callingAddress = NextWord();
-
-#if DEBUG
-            if (callingAddress == 0x05)
-            {
-                if (_registers.c == 0x09)
-                {
-                    ushort startingAddress = _registers.DE;
-
-                    byte character = MCU.ReadByte(startingAddress);
-                    while (character != '$')
-                    {
-                        Console.Write((char)character);
-                        startingAddress += 1;
-
-                        character = MCU.ReadByte(startingAddress);
-                    }
-                }
-                else if (_registers.c == 0x02)
-                {
-                    Console.Write((char)_registers.e);
-                }
-            }
-            else if (callingAddress == 0x00)
-            {
-                Emulator.Instance.StopEmulation();
-            }
-#endif
+            ushort callingAddress = NextWord();            
 
             //Saving into stack pointer the address of the instruction to be 
             //processed when returning from call
@@ -1816,7 +1789,7 @@ namespace SInvader_Core.i8080
         public int Execute()
         {
             int opcodeCycles = 0;
-
+         
             if (!AreThereInterruptToBeExecuted())
             {
                 Instruction currentInstruction = _instructions[_opcode];
@@ -1861,6 +1834,30 @@ namespace SInvader_Core.i8080
 
             PC = callingAddress;
             _tCycles = 11;
+        }
+
+        /// <summary>
+        /// Emulate a call to
+        /// </summary>
+        public void PerformBdosCall()
+        {
+            if (_registers.c == 0x09)
+            {
+                ushort startingAddress = _registers.DE;
+
+                byte character = MCU.ReadByte(startingAddress);
+                while (character != '$')
+                {
+                    Console.Write((char)character);
+                    startingAddress += 1;
+
+                    character = MCU.ReadByte(startingAddress);
+                }
+            }
+            else if (_registers.c == 0x02)
+            {
+                Console.Write((char)_registers.e);
+            }
         }
     }
 }
