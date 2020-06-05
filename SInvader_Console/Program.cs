@@ -31,7 +31,7 @@ namespace SInvader_Console
 
             Console.WriteLine("\n");
             Console.WriteLine("Test Finished");
-            Console.WriteLine("Press key to exit");
+            Console.WriteLine("Press any key to exit");
             Console.ReadKey();
         }
     }

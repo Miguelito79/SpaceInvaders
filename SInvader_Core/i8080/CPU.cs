@@ -907,41 +907,7 @@ namespace SInvader_Core.i8080
 
             PC += instruction.length;
             _tCycles = instruction.tCycles;
-        }
-
-        //public void DecimalAdjustAccumulator(Instruction instruction)
-        //{
-        //    int daa = _registers.a;
-        //    if ((daa & 0x0F) > 0x9 || ACFlag == 1)
-        //    {
-        //        ACFlag = (((daa & 0x0F) + 0x06) & 0xF0) != 0 ? 1 : 0;
-
-        //        daa += 0x06;
-        //        if ((daa & 0xFF00) != 0)
-        //        {
-        //            CYFlag = 1;
-        //        }
-        //    }
-
-        //    if ((daa & 0xF0) > 0x90 || CYFlag == 1)
-        //    {
-        //        daa += 0x60;
-
-        //        if ((daa & 0xFF00) != 0)
-        //        {
-        //            CYFlag = 1;
-        //        }
-        //    }
-            
-        //    ZFlag = ComputeZFlag((ushort)daa);
-        //    SFlag = ComputeSFlag((ushort)daa);
-        //    PFlag = ComputeParity((byte)daa);
-
-        //    _registers.a = (byte)daa;
-
-        //    PC += instruction.length;
-        //    _tCycles = instruction.tCycles;
-        //}
+        }        
         #endregion
 
         #region Logical Group
@@ -1837,7 +1803,7 @@ namespace SInvader_Core.i8080
         }
 
         /// <summary>
-        /// Emulate a call to
+        /// Emulate CP/M bdos system call
         /// </summary>
         public void PerformBdosCall()
         {

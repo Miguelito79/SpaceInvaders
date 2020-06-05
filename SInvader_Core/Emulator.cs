@@ -174,7 +174,7 @@ namespace SInvader_Core
                 long elapsedTimeFromLastPeriod = currentTime - _lastValue;
 
                 long numberOfCycleToRun = 2000 * elapsedTimeFromLastPeriod;
-                while (numberOfCycleToRun > 0)
+                while (numberOfCycleToRun > 0 && !_stopEmulation)
                 {
                     numberOfCycleToRun -= PerformSingleStep();
                 }

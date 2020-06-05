@@ -75,8 +75,8 @@
             // runSpaceInvadersToolStripMenuItem
             // 
             this.runSpaceInvadersToolStripMenuItem.Name = "runSpaceInvadersToolStripMenuItem";
-            this.runSpaceInvadersToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.runSpaceInvadersToolStripMenuItem.Text = "Run Space Invaders";
+            this.runSpaceInvadersToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.runSpaceInvadersToolStripMenuItem.Text = "Load Space Invaders";
             this.runSpaceInvadersToolStripMenuItem.Click += new System.EventHandler(this.runSpaceInvaders_Click);
             // 
             // pictureBox

@@ -4,6 +4,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +17,9 @@ namespace SInvader_Core.MMU
     /// This class provide memory access specific for the emulation of SpaceInvaders
     /// </summary>
     class MCUR : MCU
-    {              
+    {
+        private string spaceInvadersHash = "7446E0994117596DE5206519E693F8875FF3455E0BE121D5CB975C3BCC224C4E";
+
         public MCUR()
         {
             buffer = new byte[3][];
@@ -52,7 +57,9 @@ namespace SInvader_Core.MMU
                             response = false;
                             break;
                         }
-                    }                                                  
+                    }
+
+                    response = VerifyLoadedContent();
                 }
                 else
                 {
@@ -64,6 +71,20 @@ namespace SInvader_Core.MMU
                 response = false;
             }
 
+            return response;
+        }
+
+        private bool VerifyLoadedContent()
+        {
+            bool response = false;
+
+            using (SHA256Managed sha256 = new SHA256Managed())
+            {
+                byte[] hash = sha256.ComputeHash(buffer[0]);
+                string hashHex = BitConverter.ToString(hash).Replace("-", "");
+                response = hashHex == spaceInvadersHash;
+            }
+            
             return response;
         }
 
