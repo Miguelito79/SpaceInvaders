@@ -82,13 +82,14 @@ namespace SInvader
 
         private void runSpaceInvaders_Click(object sender, EventArgs e)
         {
-            List<string> roms = new List<string>();
-            roms.Add(@"C:\Temp\games\spaceinvaders\invaders.h");
-            roms.Add(@"C:\Temp\games\spaceinvaders\invaders.g");
-            roms.Add(@"C:\Temp\games\spaceinvaders\invaders.f");
-            roms.Add(@"C:\Temp\games\spaceinvaders\invaders.e");
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Zip Files (*.zip)|*.zip|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = @"C:\Temp\games\spaceinvaders";
 
-            _emulator.Run(roms.ToArray());
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                _emulator.Run(openFileDialog.FileName);
+            }            
         }
 
         //private void button2_Click(object sender, EventArgs e)

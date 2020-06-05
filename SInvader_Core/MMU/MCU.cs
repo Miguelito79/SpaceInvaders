@@ -20,6 +20,8 @@ namespace SInvader_Core.MMU
 
         public abstract void Clear();
 
+        public abstract bool LoadFile(string fullPath);
+
         public abstract bool LoadMultipleFiles(string[] path);
 
         public abstract bool LoadDataInMemoyAt(byte[] data, int offset);

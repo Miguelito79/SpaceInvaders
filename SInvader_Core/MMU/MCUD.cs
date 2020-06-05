@@ -104,6 +104,11 @@ namespace SInvader_Core.MMU
         public override void WriteByte(ushort address, byte data)
         {
             buffer[0][address] = data;
-        }        
+        }
+
+        public override bool LoadFile(string fullPath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

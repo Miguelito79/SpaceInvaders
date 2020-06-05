@@ -129,6 +129,20 @@ namespace SInvader_Core
             }
         }
 
+
+        public void Run(String fullPath)
+        {
+            if (_currentState == TCurrentState.STOPPED)
+            {
+                if (MCU.LoadFile(fullPath))
+                {
+                    _stopWatch.Start();
+                    _currentState = TCurrentState.RUNNING;
+                    _timer = new Timer(TimerAsync_CallBack, null, 0, Timeout.Infinite);
+                }
+            }
+        }
+
         public void Run(String fullPath, int offset)
         {
             if (MCU.LoadFileInMemoryAt(fullPath, offset))
@@ -192,7 +206,7 @@ namespace SInvader_Core
 
                     // CP/M warm boot (test finished and restarted itself)
                     if (_cpu.PC == 0x00)
-                    _stopEmulation = true;
+                        _stopEmulation = true;
 
                     // Call to CP/M bios emulated function to write characters on screen
                     if (_cpu.PC == 0x05)
