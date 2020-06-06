@@ -1,5 +1,7 @@
 ## Space Invaders
 A space invaders emulator written in c#. 
+The CPU is fully implemented including the DAA instruction and the auxillary carry flag.
+
 
 ![enter image description here](https://github.com/Miguelito79/SpaceInvaders/blob/master/Images/screenshot.jpg)
 
