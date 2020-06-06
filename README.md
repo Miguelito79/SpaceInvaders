@@ -5,6 +5,22 @@ The CPU is fully implemented including the DAA instruction and the auxillary car
 
 ![enter image description here](https://github.com/Miguelito79/SpaceInvaders/blob/master/Images/screenshot.jpg)
 
+ ### HOW TO PLAY
+ 
+|Key| Command  |
+|--|--|
+|C  |Insert Coin  |
+|1  |Start Player 1  |
+|Arrow Left| P1 Move left|
+|Arrow Right| P1 Move right|
+|Z| P1 Fire|
+|2 | Start Player 2|
+|S | P2 Move left|
+|F | P2 Move right
+|E | P2 Fire|
+
+
+
  ### TEST RESULTS
 
  **CPUTEST.COM - DIAGNOSTICS II V1.2 - CPU TEST** 
