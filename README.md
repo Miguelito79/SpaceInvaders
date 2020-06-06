@@ -1,4 +1,5 @@
-## Space Invaders
+## Space Invaders [![Build Status](https://travis-ci.com/Miguelito79/SpaceInvaders.svg?branch=master)](https://travis-ci.com/Miguelito79/SpaceInvaders)
+
 A space invaders emulator written in c#.  
 The CPU is fully implemented including the DAA instruction and the auxillary carry flag.  
 
