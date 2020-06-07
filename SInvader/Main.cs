@@ -57,7 +57,10 @@ namespace SInvader
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
         {
-            _emulator.KeyDown(e.KeyValue);
+            if (e.KeyCode == Keys.Escape)
+                this.Close();
+            else
+                _emulator.KeyDown(e.KeyValue);
         }
 
         private void Main_KeyUp(object sender, KeyEventArgs e)
@@ -90,11 +93,6 @@ namespace SInvader
             {
                 _emulator.Run(openFileDialog.FileName);
             }            
-        }
-
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    _emulator.StopEmulation();
-        //}        
+        }        
     }
 }
