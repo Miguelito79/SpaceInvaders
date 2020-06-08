@@ -89,7 +89,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="iconfinder_Invader.ico" />
     <Content Include="Invader.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

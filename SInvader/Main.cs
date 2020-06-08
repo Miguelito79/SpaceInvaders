@@ -57,10 +57,18 @@ namespace SInvader
 
         private void Main_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-                this.Close();
-            else
-                _emulator.KeyDown(e.KeyValue);
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    this.Close();
+                    break;                    
+                case Keys.P:
+                    _emulator.PauseEmulation();
+                    break;
+                default:
+                    _emulator.KeyDown(e.KeyValue);
+                    break;
+            }            
         }
 
         private void Main_KeyUp(object sender, KeyEventArgs e)

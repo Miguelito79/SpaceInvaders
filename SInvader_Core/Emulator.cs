@@ -34,18 +34,15 @@ namespace SInvader_Core
             RUNNING,
             PAUSED,
             STOPPED
-        }          
-        
+        }                  
 
         //Number of total cycles executed by CPU
         //private int _tCycles;
         //Number of VBlank Cycles executed during an intevall of time
-        private int _vBlankCycles;
-        //
+        private int _vBlankCycles;       
         private long _lastValue;
 
-        private Devices _devices;
-        private bool _stopEmulation;        
+        private AutoResetEvent _autoReset;
 
         //Next VBLANK interrupt to be fired
         private byte _nextVblankInterrupt; 
@@ -78,6 +75,7 @@ namespace SInvader_Core
             private set { }
         }
 
+        private Devices _devices;
         public Devices Devices
         {
             get { return _devices; }
@@ -88,8 +86,8 @@ namespace SInvader_Core
         {
             set
             {
-                ((SoundDevice)(_devices.OutputDeviceList[3] as IOutputDevice)).Enabled = value;
-                ((SoundDevice)(_devices.OutputDeviceList[5] as IOutputDevice)).Enabled = value;
+                ((_devices.OutputDeviceList[3] as SoundDevice)).Enabled = value;
+                ((_devices.OutputDeviceList[5] as SoundDevice)).Enabled = value;
             }
         }
 
@@ -102,7 +100,7 @@ namespace SInvader_Core
 
         private Emulator()
         {
-            _stopEmulation = false;
+            _currentState = TCurrentState.STOPPED;
             _nextVblankInterrupt = GPU.END_VBLANK_OPCODE;
 
             _mcu = new MCUR();          
@@ -116,7 +114,8 @@ namespace SInvader_Core
             _devices = new Devices();
             _stopWatch = new Stopwatch();
 
-            _currentState = TCurrentState.STOPPED;            
+            _currentState = TCurrentState.STOPPED;
+            _autoReset = new AutoResetEvent(false);
         }
 
         static Emulator()
@@ -128,7 +127,7 @@ namespace SInvader_Core
         {
             if (_currentState != TCurrentState.STOPPED)
             {
-                _stopEmulation = true;
+                _currentState = TCurrentState.STOPPED;
                 _stopWatch.Stop();
 
                 _mcu.Clear();
@@ -137,6 +136,27 @@ namespace SInvader_Core
             }
         }
 
+        public void PauseEmulation()
+        {
+            if (_currentState == TCurrentState.RUNNING)
+            {
+                _currentState = TCurrentState.PAUSED;
+            }
+            else if (_currentState == TCurrentState.PAUSED)            
+            {
+                _currentState = TCurrentState.RUNNING;
+                _autoReset.Set();
+            }
+        }
+
+        public void ResumeEmulation()
+        {
+            if (_currentState == TCurrentState.PAUSED)
+            {
+                _autoReset.Set();
+                _currentState = TCurrentState.RUNNING;
+            }
+        }
 
         public void Run(String fullPath)
         {
@@ -153,10 +173,14 @@ namespace SInvader_Core
 
         public void Run(String fullPath, int offset)
         {
-            if (MCU.LoadFileInMemoryAt(fullPath, offset))
+            if (_currentState == TCurrentState.STOPPED)
             {
-                _stopWatch.Start();
-                _timer = new Timer(TimerAsync_CallBack, null, 0, Timeout.Infinite);
+                if (MCU.LoadFileInMemoryAt(fullPath, offset))
+                {
+                    _stopWatch.Start();
+                    _currentState = TCurrentState.RUNNING;
+                    _timer = new Timer(TimerAsync_CallBack, null, 0, Timeout.Infinite);
+                }
             }
         }
 
@@ -167,23 +191,31 @@ namespace SInvader_Core
                 if (MCU.LoadMultipleFiles(multipleRomFiles))
                 {
                     _stopWatch.Start();
-                    _currentState = TCurrentState.RUNNING;
-                    
-                    _timer = new Timer(TimerAsync_CallBack, null, 0, Timeout.Infinite);
+                    _currentState = TCurrentState.RUNNING;                    
+                    _timer = new Timer(TimerAsync_CallBack, null, 0, Timeout.Infinite);                    
                 }
             }
         }
       
         private void TimerAsync_CallBack(object state)
         {
-            if (!_stopEmulation)
+            if (_currentState != TCurrentState.STOPPED)
             {
                 long currentTime = _stopWatch.ElapsedMilliseconds;
                 long elapsedTimeFromLastPeriod = currentTime - _lastValue;
 
                 long numberOfCycleToRun = 2000 * elapsedTimeFromLastPeriod;
-                while (numberOfCycleToRun > 0 && !_stopEmulation)
+                while (numberOfCycleToRun > 0 && _currentState != TCurrentState.STOPPED)
                 {
+                    if (_currentState == TCurrentState.STOPPED)
+                        break;
+                    else if (_currentState == TCurrentState.PAUSED)
+                    {
+                        _stopWatch.Stop();
+                        _autoReset.WaitOne();
+                        _stopWatch.Start();
+                    }
+
                     numberOfCycleToRun -= PerformSingleStep();
                 }
 
@@ -204,7 +236,8 @@ namespace SInvader_Core
         {
             if (MCU.LoadFileInMemoryAt(fullPath, memoryOffset))
             {
-                while (!_stopEmulation)
+                _currentState = TCurrentState.RUNNING;
+                while (_currentState != TCurrentState.STOPPED)
                 {
                     if (!_cpu.Halted)
                     {
@@ -214,7 +247,7 @@ namespace SInvader_Core
 
                     // CP/M warm boot (test finished and restarted itself)
                     if (_cpu.PC == 0x00)
-                        _stopEmulation = true;
+                        _currentState = TCurrentState.STOPPED;
 
                     // Call to CP/M bios emulated function to write characters on screen
                     if (_cpu.PC == 0x05)
@@ -271,7 +304,7 @@ namespace SInvader_Core
         }
 
         public void KeyDown(int key)
-        {
+        {                            
             _devices.KeyDown(key);
         }
 
