@@ -17,7 +17,7 @@ namespace SInvader_Core.IO
     public class SoundDevice : IOutputDevice, IDisposable
     {
         private class PlaySound : IDisposable 
-        {
+        {            
             private bool _loopPlaying;
             private string _path;
             private WaveOutEvent _outputDevice;
@@ -32,6 +32,13 @@ namespace SInvader_Core.IO
                 _audioFileReader = null;
                 _loopPlaying = false;
                 _path = string.Empty;
+            }
+
+            private bool _enabled;
+            public bool Enabled
+            {
+                get { return _enabled; }
+                set { _enabled = value; }
             }
 
             public bool LoopPlaying
@@ -50,26 +57,33 @@ namespace SInvader_Core.IO
                     _audioFileReader = new AudioFileReader(path);
                     _outputDevice = new WaveOutEvent();
                     _outputDevice.Init(_audioFileReader);
+                    _enabled = true;
                 }
             }
 
             public void Play()
             {
-                if (!string.IsNullOrEmpty(_path))
+                if (_enabled)
                 {
-                    _outputDevice.Play();
-                    _audioFileReader.Position = 0;
+                    if (!string.IsNullOrEmpty(_path))
+                    {
+                        _outputDevice.Play();
+                        _audioFileReader.Position = 0;
+                    }
                 }
             }            
 
             public void LoopPlay()
             {
-                if (_loopPlaying == false)
+                if (_enabled)
                 {
-                    _loopPlaying = true;
+                    if (_loopPlaying == false)
+                    {
+                        _loopPlaying = true;
 
-                    Thread thread = new Thread(PlayInLoopAsync_CallBack);
-                    thread.Start();
+                        Thread thread = new Thread(PlayInLoopAsync_CallBack);
+                        thread.Start();
+                    }
                 }
             }            
 
@@ -118,6 +132,15 @@ namespace SInvader_Core.IO
                     break;
             }                      
         }        
+
+        public bool Enabled
+        {           
+            set
+            {
+                foreach (PlaySound playSound in this._soundDictionary.Values)
+                    playSound.Enabled = value;
+            }
+        }
 
         private void AllocateSoundForPort3()
         {

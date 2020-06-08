@@ -34,11 +34,8 @@ namespace SInvader_Core
             RUNNING,
             PAUSED,
             STOPPED
-        }
-
-        private CPU _cpu;
-        private GPU _gpu;
-        private MCU _mcu;
+        }          
+        
 
         //Number of total cycles executed by CPU
         //private int _tCycles;
@@ -51,28 +48,30 @@ namespace SInvader_Core
         private bool _stopEmulation;        
 
         //Next VBLANK interrupt to be fired
-        private byte _nextVblankInterrupt;       
-
-        private TCurrentState _currentState;
+        private byte _nextVblankInterrupt; 
         
-
+        //Define the current state of the emulator
+        private TCurrentState _currentState;      
         public TCurrentState CurrentState
         {
             get { return _currentState; }
             private set { }
         }
 
+        private CPU _cpu;
         public CPU CPU        {
             get { return _cpu; }
             private set { }
         }
 
+        private MCU _mcu;
         public MCU MCU
         {
             get { return _mcu; }
             set { _mcu = value; }
         }
 
+        private GPU _gpu;
         public GPU GPU
         {
             get { return _gpu; }
@@ -83,6 +82,15 @@ namespace SInvader_Core
         {
             get { return _devices; }
             private set { }
+        }
+
+        public bool EnabledSound
+        {
+            set
+            {
+                ((SoundDevice)(_devices.OutputDeviceList[3] as IOutputDevice)).Enabled = value;
+                ((SoundDevice)(_devices.OutputDeviceList[5] as IOutputDevice)).Enabled = value;
+            }
         }
 
         private static readonly Emulator _instance;

@@ -61,7 +61,7 @@ namespace SInvader_Core.IO
             OutputDeviceList.Add(2, _shiftOffsetDevice);
             OutputDeviceList.Add(3, _soundDevice3);
             OutputDeviceList.Add(4, _shiftDevice);            
-            OutputDeviceList.Add(5, _soundDevice5);
+            OutputDeviceList.Add(5, _soundDevice5);            
         }
 
         public void KeyDown(int key)

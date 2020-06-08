@@ -33,6 +33,8 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSpaceInvadersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.soundEffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -58,7 +60,8 @@
             // 
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.optionToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(451, 25);
@@ -79,6 +82,24 @@
             this.runSpaceInvadersToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.runSpaceInvadersToolStripMenuItem.Text = "Load Space Invaders";
             this.runSpaceInvadersToolStripMenuItem.Click += new System.EventHandler(this.runSpaceInvaders_Click);
+            // 
+            // optionToolStripMenuItem
+            // 
+            this.optionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.soundEffectsToolStripMenuItem});
+            this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
+            this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 21);
+            this.optionToolStripMenuItem.Text = "Option";
+            // 
+            // soundEffectsToolStripMenuItem
+            // 
+            this.soundEffectsToolStripMenuItem.Checked = true;
+            this.soundEffectsToolStripMenuItem.CheckOnClick = true;
+            this.soundEffectsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.soundEffectsToolStripMenuItem.Name = "soundEffectsToolStripMenuItem";
+            this.soundEffectsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.soundEffectsToolStripMenuItem.Text = "Sound Effects";
+            this.soundEffectsToolStripMenuItem.Click += new System.EventHandler(this.soundEffectsToolStripMenuItem_Click);
             // 
             // pictureBox
             // 
@@ -124,6 +145,8 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSpaceInvadersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem soundEffectsToolStripMenuItem;
     }
 }
 

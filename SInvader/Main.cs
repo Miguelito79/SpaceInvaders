@@ -93,6 +93,13 @@ namespace SInvader
             {
                 _emulator.Run(openFileDialog.FileName);
             }            
-        }        
+        }
+
+        private void soundEffectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool status = ((ToolStripMenuItem)sender).Checked;
+            
+            _emulator.EnabledSound = status;
+        }
     }
 }
