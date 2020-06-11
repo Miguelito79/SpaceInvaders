@@ -11,6 +11,7 @@ The CPU is fully implemented including the DAA instruction and the auxillary car
 |Key| Action  |
 |--|--|
 |C  |Insert Coin  |
+|p  |Pause / Resume |
 |1  |Start Player 1  |
 |Arrow Left| P1 Move left|
 |Arrow Right| P1 Move right|
