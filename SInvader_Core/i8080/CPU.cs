@@ -176,42 +176,41 @@ namespace SInvader_Core.i8080
             }
         }
 
-        //SIGN FLAG - BIT 7
+        //BIT 7 - SIGN FLAG
         public int SFlag
         {
             get { return (f & 0x80) >> 7; }
             set { f = (byte)((f & ~(1 << 7)) | (value << 7)); }
-        }        
+        }
 
-        //ZERO FLAG - BIT 6
+        //BIT 6 - ZERO FLAG
         public int ZFlag
         {
             get { return (f & 0x40) >> 6; }
             set { f = (byte)((f & ~(1 << 6)) | (value << 6)); }
         }       
 
-        //BIT 5 UNUSED - ALWAYS 0 
+        //BIT 5 - UNUSED - ALWAYS 0 
 
-
-        // AUXILIARY CARRY FLAG - BIT 4
+        //BIT 4 - AUXILIARY CARRY FLAG
         public int ACFlag
         {
             get { return (f & 0x10) >> 4; }
             set { f = (byte)((f & ~(1 << 4)) | (value << 4)); }
         }
 
-        //BIT 3 UNUSED - ALWAYS 0
-
-        //BIT 2 UNUSED - ALWAYS 1
-
-        // PARITY FLAG
+        //BIT 3 - UNUSED ALWAYS 0
+        
+        //BIT 2 - PARITY FLAG
         public int PFlag
         {
             get { return (f & 0x04) >> 2; }
             set { f = (byte)((f & ~(1 << 2)) | (value << 2)); }
         }
 
-        // CARRY FLAG
+        //BIT 1 - UNUSED - ALWAYS 1
+
+        //BIT 0 - CARRY FLAG
         public int CYFlag
         {
             get { return (f & 0x01); }

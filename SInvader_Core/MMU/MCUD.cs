@@ -98,7 +98,7 @@ namespace SInvader_Core.MMU
 
         public override byte ReadByte(ushort address)
         {
-            return buffer[0][address];            
+            return buffer[0][address];           
         }
 
         public override void WriteByte(ushort address, byte data)
