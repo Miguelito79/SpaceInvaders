@@ -90,9 +90,23 @@ namespace SInvader_Core.IO
             private void PlayInLoopAsync_CallBack()
             {                
                 while (_loopPlaying)
-                {
-                    _outputDevice.Play();
-                    _audioFileReader.Position = 0;
+                {                                       
+                    switch (Emulator.Instance.CurrentState)
+                    {
+                        case Emulator.TCurrentState.PAUSED:
+                            _outputDevice.Stop();
+                            break;
+                        case Emulator.TCurrentState.STOPPED:
+                            _loopPlaying = false;
+                            break;
+                        default:
+                            _outputDevice.Play();
+                            _audioFileReader.Position = 0;
+                            break;
+                    }
+
+                    if (Emulator.Instance.CurrentState == Emulator.TCurrentState.PAUSED)
+                        _outputDevice.Pause();
                 }                
             }
 
@@ -130,7 +144,7 @@ namespace SInvader_Core.IO
                 case 5:
                     AllocateSoundForPort5();
                     break;
-            }                      
+            }
         }        
 
         public bool Enabled

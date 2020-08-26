@@ -16,6 +16,7 @@ namespace SInvader_Core.IO
             Z = 0x5A,           //Player1 Shot
             ArrowLeft = 0x25,   //Move left 
             ArrowRight = 0x27,  //Move Right
+            ArrowUp = 0x26,     //Arrow Up
             E = 0x45,           //Player2 Left
             S = 0x53,           //Player2 Right
             F = 0x46            //Player2 Shot
@@ -50,7 +51,7 @@ namespace SInvader_Core.IO
 
             _shiftOffsetDevice = new ShiftOffsetDevice();
             _shiftDevice = new ShiftDevice(_shiftOffsetDevice);
-            _arcadePort1 = new ArcadePort1((int)Keys.C, (int)Keys.P1Start, (int)Keys.P2Start, (int)Keys.Z, (int)Keys.ArrowLeft, (int)Keys.ArrowRight);
+            _arcadePort1 = new ArcadePort1((int)Keys.C, (int)Keys.P1Start, (int)Keys.P2Start, (int)Keys.ArrowUp, (int)Keys.ArrowLeft, (int)Keys.ArrowRight);
             _arcadePort2 = new ArcadePort2((int)Keys.S, (int)Keys.F, (int)Keys.E);
             _soundDevice3 = new SoundDevice(3);
             _soundDevice5 = new SoundDevice(5);
@@ -71,7 +72,7 @@ namespace SInvader_Core.IO
                 case (int)Keys.C:
                 case (int)Keys.P1Start:
                 case (int)Keys.P2Start:
-                case (int)Keys.Z:
+                case (int)Keys.ArrowUp:
                 case (int)Keys.ArrowLeft:
                 case (int)Keys.ArrowRight:
                     _arcadePort1.KeyDown(key);
@@ -91,7 +92,7 @@ namespace SInvader_Core.IO
                 case (int)Keys.C:
                 case (int)Keys.P1Start:
                 case (int)Keys.P2Start:
-                case (int)Keys.Z:
+                case (int)Keys.ArrowUp:
                 case (int)Keys.ArrowLeft:
                 case (int)Keys.ArrowRight:
                     _arcadePort1.KeyUp(key);
